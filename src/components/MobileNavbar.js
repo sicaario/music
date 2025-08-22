@@ -24,7 +24,7 @@ export default function MobileNavbar({
     return (
         <>
             <motion.nav 
-                className="h-20 bg-gradient-to-r from-slate-950/95 via-slate-900/95 to-slate-950/95 backdrop-blur-2xl border-t border-cyan-500/30 text-white flex justify-around items-center md:hidden relative overflow-hidden"
+                className="h-13 bg-gradient-to-r from-slate-950/95 via-slate-900/95 to-slate-950/95 backdrop-blur-2xl border-t border-cyan-500/30 text-white flex justify-around items-center md:hidden relative overflow-hidden"
                 initial={{ y: 100 }}
                 animate={{ y: 0 }}
                 transition={{ duration: 0.5, ease: "easeOut" }}

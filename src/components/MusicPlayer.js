@@ -150,7 +150,7 @@ export default function MusicPlayer({
     return (
         <>
             {/* Main Music Player Bar - Fixed positioning with proper safe areas */}
-            <div className="fixed bottom-0 left-0 right-0 w-full bg-gradient-to-r from-slate-950/95 via-slate-900/95 to-slate-950/95 backdrop-blur-2xl border-t border-cyan-500/30 text-white px-2 sm:px-4 md:px-8 relative overflow-hidden z-40"
+            <div className="fixed -bottom-10 md:bottom-0 left-0 right-0 w-full bg-gradient-to-r from-slate-950/95 via-slate-900/95 to-slate-950/95 backdrop-blur-2xl border-t border-cyan-500/30 text-white px-2 sm:px-4 md:px-8 relative overflow-hidden z-40"
                  style={{
                      paddingBottom: 'env(safe-area-inset-bottom)', // iOS safe area
                      minHeight: '80px', // Ensure minimum height
@@ -161,7 +161,7 @@ export default function MusicPlayer({
                 <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/5 via-blue-500/10 to-purple-500/5 animate-pulse" />
                 
                 {/* Main Content Container with proper padding */}
-                <div className="flex items-center w-full py-3 md:py-4 relative z-10 min-h-[72px]">
+                <div className="flex items-center w-full py-3 md:py-4 relative z-10 min-h-[70px]">
                     
                     {/* (1) Left Section: Thumbnail, Title/Artist, and Like Button */}
                     <div className="flex items-center w-full md:w-[30%] min-w-0">
