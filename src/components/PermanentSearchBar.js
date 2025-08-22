@@ -121,7 +121,7 @@ export default function PermanentSearchBar({ setSong }) {
                 <MdSearch className="text-cyan-400 flex-shrink-0" size={20} />
                 <input
                     type="text"
-                    placeholder="Search for songs, artists, or albums..."
+                    placeholder="Search for songs and albums"
                     className="flex-1 bg-transparent text-white placeholder-slate-400 focus:outline-none text-sm sm:text-lg"
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}

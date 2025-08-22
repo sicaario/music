@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import ReactPlayer from 'react-player/youtube'
 import { FaYoutube } from "react-icons/fa";
 import { LuPanelRightClose } from "react-icons/lu";
-import { MdExpandMore, MdExpandLess, MdClose } from 'react-icons/md';
+import { MdExpandMore, MdExpandLess, MdClose, MdMusicNote } from 'react-icons/md';
 import {
     MdFavoriteBorder,
     MdFavorite,
@@ -12,6 +12,7 @@ import {
     MdPause,
 } from 'react-icons/md'
 import { motion, AnimatePresence } from 'framer-motion'
+import music from './logo.png'
 
 export default function MusicPlayer({
                                         song,
@@ -38,7 +39,7 @@ export default function MusicPlayer({
     const defaultSong = {
         title: 'Memories',
         artist: 'Harman',
-        imageUrl: 'logo.png',
+        imageUrl: music,
         videoId: ''
     }
 
