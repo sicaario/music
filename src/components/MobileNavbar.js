@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
-import { MdHome, MdFavorite, MdLogin, MdPlaylistPlay, MdShare,
-    MdDownload, } from 'react-icons/md';
+import { MdHome, MdFavorite, MdLogin, MdPlaylistPlay} from 'react-icons/md';
 import { CiLogout } from 'react-icons/ci';
 import { motion } from 'framer-motion';
 import PropTypes from 'prop-types';
-import ShareDialog from "./ShareDialog";
-import ReceiveDialog from "./ReceiveDialog";
+
 
 export default function MobileNavbar({ 
     activePanel,
@@ -78,28 +76,6 @@ export default function MobileNavbar({
                         )}
                     </motion.button>
 
-                    {/* Share Button */}
-                    <motion.button
-                        className="relative p-3 rounded-2xl text-slate-300 hover:text-green-400 hover:bg-slate-800/50 transition-all duration-300"
-                        onClick={() => setIsShareOpen(true)}
-                        aria-label="Share Liked Songs"
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.95 }}
-                    >
-                        <MdShare size={24} />
-                    </motion.button>
-
-                    {/* Download/Receive Button */}
-                    <motion.button
-                        className="relative p-3 rounded-2xl text-slate-300 hover:text-yellow-400 hover:bg-slate-800/50 transition-all duration-300"
-                        onClick={() => setIsReceiveOpen(true)}
-                        aria-label="Receive Shared Songs"
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.95 }}
-                    >
-                        <MdDownload size={24} />
-                    </motion.button>
-
                     {/* Playlists Button - Only visible when signed in */}
                     {user && (
                         <motion.button
@@ -136,21 +112,6 @@ export default function MobileNavbar({
                 </div>
             </motion.nav>
 
-            {/* Share Dialog */}
-            {isShareOpen && (
-                <ShareDialog
-                    onClose={() => setIsShareOpen(false)}
-                    likedSongs={likedSongs}
-                />
-            )}
-
-            {/* Receive Dialog */}
-            {isReceiveOpen && (
-                <ReceiveDialog
-                    onClose={() => setIsReceiveOpen(false)}
-                    setLikedSongs={setLikedSongs}
-                />
-            )}
         </>
     );
 }
