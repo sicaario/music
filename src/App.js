@@ -161,16 +161,31 @@ export default function App() {
      * Set the current song and update recently played list
      * @param {Object} song - The selected song object
      */
-    const handleSetCurrentSong = (song) => {
+    const handleSetCurrentSong = async (song) => {
         if (!song?.videoId) {
             alert("This song does not have a valid YouTube videoId.");
             return;
         }
+        
         setCurrentSong(song);
+        
+        let updatedRecentlyPlayed;
         setRecentlyPlayed((prev) => {
             const filtered = prev.filter((item) => item.videoId !== song.videoId);
-            return [song, ...filtered].slice(0, 10); // Keep only the latest 10
+            updatedRecentlyPlayed = [song, ...filtered].slice(0, 10); // Keep only the latest 10
+            return updatedRecentlyPlayed;
         });
+
+        // Immediately save recently played to Firebase if user is signed in
+        if (user) {
+            try {
+                await saveRecentlyPlayed(user.uid, updatedRecentlyPlayed);
+                console.log("Recently played songs saved immediately to Firebase.");
+            } catch (error) {
+                console.error("Error saving recently played songs:", error);
+                // Don't show error toast for recently played as it's less critical
+            }
+        }
     };
 
     /**
@@ -178,14 +193,53 @@ export default function App() {
      * @param {Object} song - The song to toggle
      * @param {boolean} isCurrentlyLiked - Whether the song is currently liked
      */
-    const handleLikeToggle = (song, isCurrentlyLiked) => {
+    const handleLikeToggle = async (song, isCurrentlyLiked) => {
+        if (!user) {
+            toast.error("You must be signed in to like songs.", {
+                position: "top-right",
+            });
+            return;
+        }
+
+        let updatedLikedSongs;
         setLikedSongs((prev) => {
             if (isCurrentlyLiked) {
-                return prev.filter((item) => item.videoId !== song.videoId);
+                updatedLikedSongs = prev.filter((item) => item.videoId !== song.videoId);
             } else {
-                return [song, ...prev];
+                updatedLikedSongs = [song, ...prev];
             }
+            return updatedLikedSongs;
         });
+
+        // Immediately save to Firebase
+        try {
+            await saveLikedSongs(user.uid, updatedLikedSongs);
+            console.log("Liked songs saved immediately to Firebase.");
+            
+            if (isCurrentlyLiked) {
+                toast.success("Song removed from liked songs!", {
+                    position: "top-right",
+                });
+            } else {
+                toast.success("Song added to liked songs!", {
+                    position: "top-right",
+                });
+            }
+        } catch (error) {
+            console.error("Error saving liked songs:", error);
+            toast.error("Failed to save liked songs. Please try again.", {
+                position: "top-right",
+            });
+            
+            // Revert the state change if saving failed
+            setLikedSongs((prev) => {
+                if (isCurrentlyLiked) {
+                    return [song, ...prev]; // Add back if removal failed
+                } else {
+                    return prev.filter((item) => item.videoId !== song.videoId); // Remove if addition failed
+                }
+            });
+        }
     };
 
     /**
@@ -193,14 +247,42 @@ export default function App() {
      * @param {number} fromIndex - The current index of the song
      * @param {number} toIndex - The new index to move the song to
      */
-    const handleReorderLikedSongs = (fromIndex, toIndex) => {
+    const handleReorderLikedSongs = async (fromIndex, toIndex) => {
+        if (!user) {
+            toast.error("You must be signed in to reorder songs.", {
+                position: "top-right",
+            });
+            return;
+        }
+
+        let reorderedSongs;
         setLikedSongs((prev) => {
-            if (toIndex < 0 || toIndex >= prev.length) return prev;
+            if (toIndex < 0 || toIndex >= prev.length) {
+                reorderedSongs = prev;
+                return prev;
+            }
             const arr = [...prev];
             const [removed] = arr.splice(fromIndex, 1);
             arr.splice(toIndex, 0, removed);
+            reorderedSongs = arr;
             return arr;
         });
+
+        // Immediately save reordered songs to Firebase
+        if (reorderedSongs && reorderedSongs !== likedSongs) {
+            try {
+                await saveLikedSongs(user.uid, reorderedSongs);
+                console.log("Reordered liked songs saved immediately to Firebase.");
+                toast.success("Songs reordered successfully!", {
+                    position: "top-right",
+                });
+            } catch (error) {
+                console.error("Error saving reordered songs:", error);
+                toast.error("Failed to save song order. Please try again.", {
+                    position: "top-right",
+                });
+            }
+        }
     };
 
     /**
